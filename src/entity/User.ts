@@ -1,4 +1,5 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import * as jwt from "jsonwebtoken";
 
 @Entity()
 export class User {
@@ -15,4 +16,7 @@ export class User {
     @Column()
     age: number;
 
+    generateToken () {
+        return jwt.sign({id: this.id}, "keyToBeSavedInEnv")
+    }
 }

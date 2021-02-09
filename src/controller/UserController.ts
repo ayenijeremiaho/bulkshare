@@ -1,16 +1,21 @@
 import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {User} from "../entity/User";
+import {verifyToken} from "../middleware/Auth";
 
 export class UserController {
 
     private userRepository = getRepository(User);
 
     async all(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.find();
+        // next(verifyToken(request,response, next));
+        let user = await this.userRepository.find();
+        console.log(user[0].generateToken());
+        return {"User" : user, "token": user[0].generateToken()};
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
+        let user = this.userRepository.findOne(request.params.id);
         return this.userRepository.findOne(request.params.id);
     }
 

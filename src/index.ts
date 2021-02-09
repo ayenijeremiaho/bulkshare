@@ -1,8 +1,8 @@
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 import * as express from "express";
-import * as bodyParser from "body-parser";
 import {Request, Response} from "express";
+import * as bodyParser from "body-parser";
 import {Routes} from "./routes";
 import {User} from "./entity/User";
 
@@ -17,10 +17,13 @@ createConnection().then(async connection => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
             const result = (new (route.controller as any))[route.action](req, res, next);
             if (result instanceof Promise) {
-                result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
+                result.then(result => result !== null && result !== undefined ? res.send(result) : undefined)
+                    .catch(reason =>  res.status(404).send(reason.message));
 
             } else if (result !== null && result !== undefined) {
                 res.json(result);
+            } else {
+                res.status(500).send("Internal Server Error");
             }
         });
     });
@@ -29,20 +32,9 @@ createConnection().then(async connection => {
     // ...
 
     // start express server
-    app.listen(3000);
+    const port = process.env.PORT || 3000;
+    app.listen(port);
 
-    // insert new users for test
-    await connection.manager.save(connection.manager.create(User, {
-        firstName: "Timber",
-        lastName: "Saw",
-        age: 27
-    }));
-    await connection.manager.save(connection.manager.create(User, {
-        firstName: "Phantom",
-        lastName: "Assassin",
-        age: 24
-    }));
-
-    console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
+    console.log(`Server has started on port ${port}. Open http://localhost:3000/users to see results`);
 
 }).catch(error => console.log(error));
