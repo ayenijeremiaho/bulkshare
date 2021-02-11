@@ -1,10 +1,21 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
-import * as jwt from "jsonwebtoken";
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    Index,
+    PrimaryGeneratedColumn,
+    Unique,
+    UpdateDateColumn
+} from "typeorm";
+import {UserRole, UserVerificationStatus} from "../service/User/UserEnum";
+import {IS_MOBILE_PHONE, IsDate, IsEmail, IsEnum, IsMobilePhone} from "class-validator";
 
 @Entity()
+@Index(["email", "username"], {unique: true})
 export class User {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     id: number;
 
     @Column()
@@ -14,9 +25,35 @@ export class User {
     lastName: string;
 
     @Column()
-    age: number;
+    @IsEmail()
+    email: string;
 
-    generateToken () {
-        return jwt.sign({id: this.id}, "keyToBeSavedInEnv")
-    }
+    @Column()
+    @IsMobilePhone('en-NG')
+    phone: string;
+
+    @Column()
+    password: string;
+
+    @Column()
+    username: string;
+
+    @Column({type: "enum", enum: UserRole, default: UserRole.BUYER})
+    @IsEnum(UserRole)
+    role: UserRole;
+
+    @Column({type: "enum", enum: UserVerificationStatus, default: UserVerificationStatus.UNVERIFIED})
+    verificationStatus: UserVerificationStatus;
+
+    @Column({type: "boolean", default: true})
+    isDisabled: Boolean
+
+    @CreateDateColumn()
+    createDate: Date;
+
+    @UpdateDateColumn()
+    updatedDate: Date;
+
+    @DeleteDateColumn()
+    deletedDate: Date;
 }

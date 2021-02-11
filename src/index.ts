@@ -1,40 +1,25 @@
 import "reflect-metadata";
-import {createConnection} from "typeorm";
 import * as express from "express";
-import {Request, Response} from "express";
-import * as bodyParser from "body-parser";
-import {Routes} from "./routes";
-import {User} from "./entity/User";
+import "express-async-errors";
+import {allRoutes} from "./routes";
+import {connectDb, logger} from "./utility";
 
-createConnection().then(async connection => {
+// create express app
+const app = express();
 
-    // create express app
-    const app = express();
-    app.use(bodyParser.json());
+// setup express app here
+app.use(express.json());
+app.use('/static', express.static('public'));
+allRoutes(app);
 
-    // register express routes from defined application routes
-    Routes.forEach(route => {
-        (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
-            const result = (new (route.controller as any))[route.action](req, res, next);
-            if (result instanceof Promise) {
-                result.then(result => result !== null && result !== undefined ? res.send(result) : undefined)
-                    .catch(reason =>  res.status(404).send(reason.message));
 
-            } else if (result !== null && result !== undefined) {
-                res.json(result);
-            } else {
-                res.status(500).send("Internal Server Error");
-            }
-        });
-    });
+// connect to db and start express server
+const port = process.env.PORT || 3000;
+connectDb().then(() => {
+    app.listen(port, () => {
+        logger.info(`Server has started on port ${port}. Open http://localhost:3000/users to see results`);
+    })
 
-    // setup express app here
-    // ...
+});
 
-    // start express server
-    const port = process.env.PORT || 3000;
-    app.listen(port);
 
-    console.log(`Server has started on port ${port}. Open http://localhost:3000/users to see results`);
-
-}).catch(error => console.log(error));

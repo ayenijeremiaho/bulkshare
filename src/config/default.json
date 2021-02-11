@@ -1,0 +1,14 @@
+{
+  "sms": {
+    "APi_KEY": "MZGnXajfgOzRc9Yw5jCUmbbF4vhGb80SPKN6jIer5OTz7tT7Qhpg7wRup0VT",
+    "hostname": "www.bulksmsnigeria.com/api/v1/sms/create",
+    "sender": "BULKSHARE"
+  },
+  "mail": {
+    "host": "smtp.hostinger.com",
+    "port": 587,
+    "secure": true,
+    "user": "bulkshare@blistorre.com",
+    "password": "QteD=Ce7"
+  }
+}

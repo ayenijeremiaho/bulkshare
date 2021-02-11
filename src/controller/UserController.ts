@@ -1,31 +1,36 @@
-import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
-import {User} from "../entity/User";
-import {verifyToken} from "../middleware/Auth";
+import {UserService} from "../service/User/UserService";
+import {validate} from "class-validator";
 
 export class UserController {
 
-    private userRepository = getRepository(User);
-
-    async all(request: Request, response: Response, next: NextFunction) {
-        // next(verifyToken(request,response, next));
-        let user = await this.userRepository.find();
-        console.log(user[0].generateToken());
-        return {"User" : user, "token": user[0].generateToken()};
+    private static getService (){
+        return new UserService();
     }
 
-    async one(request: Request, response: Response, next: NextFunction) {
-        let user = this.userRepository.findOne(request.params.id);
-        return this.userRepository.findOne(request.params.id);
+    all(request: Request, response: Response, next: NextFunction) {
+        return response.json(UserController.getService().all());
+    }
+
+    one(request: Request, response: Response, next: NextFunction) {
+        let id = request.params.id;
+
+        let result = UserController.getService().one(id);
+        if(result) return response.send(200).json(result);
+
+        return response.status(404).send("No User");
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.save(request.body);
+        let result = await UserController.getService().validate(request.body);
+        if(!result){
+            return response.json(UserController.getService().save(request.body));
+        }
+        return response.status(404).send("Error Saving user");
     }
 
-    async remove(request: Request, response: Response, next: NextFunction) {
-        let userToRemove = await this.userRepository.findOne(request.params.id);
-        await this.userRepository.remove(userToRemove);
+    remove(request: Request, response: Response, next: NextFunction) {
+        return UserController.getService().remove(request.params.id);
     }
 
 }
