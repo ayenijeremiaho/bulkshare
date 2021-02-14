@@ -4,19 +4,17 @@ import * as jwt from "jsonwebtoken";
 import {SignupDto} from "../../dto/SignupDto";
 import {validateObject} from "../Utility/errorValidation";
 import {plainToClass} from "class-transformer";
-import {decrypt, encrypt} from "../Utility/encryptDecrypt";
-import {logger} from "../../utility";
-import config from "config";
+import {decrypt} from "../Utility/encryptDecrypt";
 import {PasswordDto} from "../../dto/PasswordDto";
 import {UserActivation} from "./UserActivation";
-import {Activation} from "../../entity/Activation";
+import config from "config";
 
 export class UserService {
 
     private getRepo = () => getRepository(User);
 
     private static generateToken(user: User) {
-        let key = String(config.get("key"));
+        let key = String(config.get("key.value"));
         return jwt.sign({id: user.id, role: user.role, status: user.status}, key, {expiresIn: '1h'});
     }
 

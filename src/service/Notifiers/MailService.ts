@@ -1,12 +1,12 @@
 import {createTransport, Transporter} from "nodemailer";
 import {logger} from "../../utility";
-import config from "config";
+import {get} from "config";
 
-const host = String(config.get("mail.host"));
-const port = Number(config.get("mail.password"));
-const user = String(config.get("mail.user"));
-const password = String(config.get("mail.password"));
-const secure = Boolean(config.get("mail.secure"));
+const host = String(get("mail.host"));
+const port = Number(get("mail.password"));
+const user = String(get("mail.user"));
+const password = String(get("mail.password"));
+const secure = Boolean(get("mail.secure"));
 
 let transporter = createTransport({
     host: host,

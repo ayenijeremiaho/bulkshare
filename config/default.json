@@ -1,0 +1,17 @@
+{
+  "sms": {
+    "APi_KEY": "",
+    "hostname": "",
+    "sender": ""
+  },
+  "mail": {
+    "host": "",
+    "port": "",
+    "secure": "",
+    "user": "",
+    "password": ""
+  },
+  "key": {
+   "value": ""
+  }
+}

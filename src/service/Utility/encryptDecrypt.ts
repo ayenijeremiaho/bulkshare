@@ -1,10 +1,13 @@
+import {get} from "config";
 import {AES, enc} from "crypto-js";
-import config from "config";
 
-let key = String(config.get("key"));
+const key = String(get('key.value'));
 
 // Encrypt
 export function encrypt(data) {
+    process.env.NODE_ENV = "stage";
+    console.log(process.env.NODE_ENV);
+
     return AES.encrypt(JSON.stringify(data), key).toString();
 }
 

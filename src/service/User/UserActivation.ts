@@ -3,8 +3,6 @@ import {User} from "../../entity/User";
 import {Activation} from "../../entity/Activation";
 import {sendMail} from "../Notifiers/MailService";
 import {encrypt} from "../Utility/encryptDecrypt";
-import {sendSms} from "../Notifiers/SmsService";
-import {Stats} from "fs";
 
 export class UserActivation {
 

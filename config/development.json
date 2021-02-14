@@ -11,5 +11,7 @@
     "user": "bulkshare@blistorre.com",
     "password": "QteD=Ce7"
   },
-  "key": 'SHOULD_BE_SAVED_IN_ENV'
+  "key": {
+    "value": "SHOULD_BE_SAVED_IN_ENV"
+  }
 }

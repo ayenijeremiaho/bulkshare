@@ -10,5 +10,9 @@
     "secure": true,
     "user": "bulkshare@blistorre.com",
     "password": ""
+  },
+  "key": {
+    "value": "SHOULD_BE_SAVED_IN_ENV"
   }
+
 }

@@ -12,6 +12,8 @@ app.use(express.json());
 app.use('/static', express.static('public'));
 allRoutes(app);
 
+logger.info(process.env.NODE_ENV);
+
 
 // connect to db and start express server
 const port = process.env.PORT || 3000;

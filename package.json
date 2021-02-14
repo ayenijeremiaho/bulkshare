@@ -32,7 +32,8 @@
       "winston": "^3.3.3"
    },
    "scripts": {
-      "start": "ts-node src/index.ts",
+      "start": "set NODE_ENV=production&& ts-node src/index.ts",
+      "dev": "set NODE_ENV=development&& ts-node src/index.ts",
       "test": "nodemon ts-node src/index.ts"
    }
 }

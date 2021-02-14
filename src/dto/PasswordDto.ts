@@ -1,14 +1,4 @@
-import {
-    IsEmail,
-    IsMobilePhone,
-    IsNotEmpty,
-    IsString,
-    Matches, Max,
-    MaxLength,
-    Min,
-    MinLength,
-    ValidateIf
-} from "class-validator";
+import {IsNotEmpty, IsString, Matches, MaxLength, MinLength} from "class-validator";
 import {Match} from "../service/Utility/match.decarator";
 import {Exclude, Expose} from "class-transformer";
 
