@@ -5,31 +5,27 @@ import {
     Entity,
     Index,
     PrimaryGeneratedColumn,
-    Unique,
     UpdateDateColumn
 } from "typeorm";
-import {UserRole, UserVerificationStatus} from "../service/User/UserEnum";
-import {IS_MOBILE_PHONE, IsDate, IsEmail, IsEnum, IsMobilePhone} from "class-validator";
+import {role, status} from "../service/User/UserEnum";
 
-@Entity()
+@Entity({name: 'users'})
 @Index(["email", "username"], {unique: true})
 export class User {
 
     @PrimaryGeneratedColumn("uuid")
     id: number;
 
-    @Column()
+    @Column({length: 255, name: "first_name"})
     firstName: string;
 
-    @Column()
+    @Column({length: 255, name: "last_name"})
     lastName: string;
 
     @Column()
-    @IsEmail()
     email: string;
 
     @Column()
-    @IsMobilePhone('en-NG')
     phone: string;
 
     @Column()
@@ -38,22 +34,21 @@ export class User {
     @Column()
     username: string;
 
-    @Column({type: "enum", enum: UserRole, default: UserRole.BUYER})
-    @IsEnum(UserRole)
-    role: UserRole;
+    @Column({type: "enum", enum: role, default: role.BUYER})
+    role: role;
 
-    @Column({type: "enum", enum: UserVerificationStatus, default: UserVerificationStatus.UNVERIFIED})
-    verificationStatus: UserVerificationStatus;
+    @Column({type: "enum", enum: status, default: status.UNVERIFIED})
+    status: status;
 
-    @Column({type: "boolean", default: true})
+    @Column({name: "is_disabled", type: "boolean", default: true})
     isDisabled: Boolean
 
-    @CreateDateColumn()
+    @CreateDateColumn({name: "created_date"})
     createDate: Date;
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({name: "updated_date"})
     updatedDate: Date;
 
-    @DeleteDateColumn()
+    @DeleteDateColumn({name: "deleted_date"})
     deletedDate: Date;
 }

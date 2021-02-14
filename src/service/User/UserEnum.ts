@@ -1,13 +1,14 @@
-
-enum UserRole {
+enum role {
     BUYER,
     SELLER,
-    ADMIN
+    ADMIN,
+    SUPER_ADMIN
 }
 
-enum UserVerificationStatus {
-    VERIFIED,
+enum status {
     PENDING,
-    UNVERIFIED
+    UNVERIFIED,
+    VERIFIED,
 }
-export {UserRole, UserVerificationStatus}
+
+export {role, status}

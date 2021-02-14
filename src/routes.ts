@@ -5,8 +5,8 @@ import {errorHandler} from "./middleware/Error";
 
 //Home Route
 export function allRoutes(app:Express) {
-    app.use("/", defaultRouter)
-    app.use("/users", userRouter);
+    app.use("/api/", defaultRouter)
+    app.use("/api/users", userRouter);
 
 
     //for handling errors
