@@ -1,4 +1,4 @@
-import {NextFunction, Request, Response} from "express";
+import {Request, Response} from "express";
 import {UserService} from "../service/User/UserService";
 import {User} from "../entity/User";
 import {plainToClass} from "class-transformer";
@@ -11,7 +11,7 @@ export class UserController {
         return new UserService();
     }
 
-    async login(request: Request, response: Response, next: NextFunction) {
+    async login(request: Request, response: Response) {
         const errors = await UserController.g_u_s().validateLoginData(request.body);
         if (errors) return response.status(400).send(errors);
 
@@ -28,7 +28,7 @@ export class UserController {
         return response.send(UserController.g_u_s().generateUserToken(user));
     }
 
-    async activate(request: Request, response: Response, next: NextFunction) {
+    async activate(request: Request, response: Response) {
         if (!request.body.key) return response.status(404).send("Invalid Request");
 
         let keyError = await UserController.g_u_s().validateActivationKey(request.body.key);
@@ -42,7 +42,7 @@ export class UserController {
 
     }
 
-    async signup(request: Request, response: Response, next: NextFunction) {
+    async signup(request: Request, response: Response) {
         let result = await UserController.g_u_s().validateNewUser(request.body);
 
         if (!result) {
@@ -53,15 +53,15 @@ export class UserController {
         return response.status(404).json(result);
     }
 
-    all(request: Request, response: Response, next: NextFunction) {
+    all(request: Request, response: Response) {
         return response.send(UserController.g_u_s().all());
     }
 
-    async remove(request: Request, response: Response, next: NextFunction) {
+    async remove(request: Request) {
         return UserController.g_u_s().remove(request.params.id);
     }
 
-    async one(request: Request, response: Response, next: NextFunction) {
+    async one(request: Request, response: Response) {
         let id = request.params.id;
         let user: User = await UserController.g_u_s().one(id);
 
@@ -69,6 +69,5 @@ export class UserController {
 
         return response.status(404).send(notFound("User"));
     }
-
 
 }

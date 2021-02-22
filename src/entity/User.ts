@@ -8,7 +8,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
-import {role, status} from "../service/Utility/Enums";
+import {role, status} from "../service/Utility/enums";
 import {Shop} from "./Shop";
 import {Image} from "./Image";
 

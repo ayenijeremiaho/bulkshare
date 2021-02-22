@@ -2,7 +2,7 @@ enum role {
     BUYER,
     SELLER,
     ADMIN,
-    SUPER_ADMIN
+    SUPER_ADMIN,
 }
 
 enum status {

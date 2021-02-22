@@ -8,13 +8,10 @@ export class Image {
     id: number;
 
     @Column()
-    name: string;
+    url: string;
 
-    @Column({type: "longblob"})
-    data: Buffer;
-
-    @Column({name:"mime_type"})
-    mimeType: string
+    @Column({name: "public_id"})
+    publicId: string;
 
     @ManyToOne(() => Product, product => product.images)
     product: Product;

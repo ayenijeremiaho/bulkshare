@@ -1,5 +1,4 @@
-import {IsEmail, IsMobilePhone, IsNotEmpty} from "class-validator";
-import {role} from "../service/Utility/Enums";
+import {role} from "../service/Utility/enums";
 import {Exclude, Expose} from "class-transformer";
 
 @Exclude()
@@ -9,23 +8,18 @@ export class UserDto {
     id: number;
 
     @Expose()
-    @IsNotEmpty()
     firstName: string;
 
     @Expose()
-    @IsNotEmpty()
     lastName: string;
 
     @Expose()
-    @IsEmail()
     email: string;
 
     @Expose()
-    @IsMobilePhone('en-NG')
     phone: string;
 
     @Expose()
-    @IsNotEmpty()
     username: string;
 
     @Expose()

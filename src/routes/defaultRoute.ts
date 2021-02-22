@@ -5,8 +5,8 @@ const defaultRouter = express.Router();
 
 const main = new DefaultController();
 
-defaultRouter.get("/", main.home)
-defaultRouter.get("/about", main.home)
-defaultRouter.get("/team", main.home)
+defaultRouter.get("/", main.home);
+defaultRouter.get("/about", main.home);
+defaultRouter.get("/team", main.home);
 
 export {defaultRouter};

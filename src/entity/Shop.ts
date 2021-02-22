@@ -8,7 +8,7 @@ import {
     UpdateDateColumn
 } from "typeorm";
 import {Category} from "./Category";
-import {status} from "../service/Utility/Enums";
+import {status} from "../service/Utility/enums";
 import {User} from "./User";
 import {Image} from "./Image";
 
@@ -21,17 +21,20 @@ export class Shop {
     @Column({nullable: false})
     name: string;
 
-    @Column({nullable: true})
+    @Column({nullable: false})
     about: string;
 
     @Column()
     address: String;
 
-    @Column({name: "company_no"})
+    @Column({name: "company_no", nullable: true})
     companyNo: String;
 
     @Column({default: false})
     delivery: boolean;
+
+    @Column({name: "is_disabled", default: false})
+    isDisabled: boolean;
 
     @Column({type: "enum", enum: status, default: status.UNVERIFIED})
     status: status;

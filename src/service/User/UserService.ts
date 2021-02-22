@@ -13,11 +13,26 @@ import {UserDto} from "../../dto/UserDto";
 import {classToClass} from "../Utility/convert";
 import {LoginDto} from "../../dto/LoginDto";
 import {logger} from "../../utility";
+import {role} from "../Utility/enums";
+
+const key = String(get("key.value"));
 
 export class UserService {
 
     private getRepo = () => getRepository(User);
 
+    async upgradeToSeller(user: User){
+        await this.updateWhere({username: user.username}, {role: role.SELLER});
+    }
+
+    verifyUserToken(token: string) {
+        try {
+            return jwt.verify(token, key)
+        } catch (e) {
+            logger.error(e.message, e);
+            return null;
+        }
+    }
 
     generateUserToken(user: User) {
         const token = UserService.generateToken(user);
@@ -142,6 +157,10 @@ export class UserService {
         return null;
     }
 
+    async findWhere(whereClause: object) {
+        return await this.getRepo().findOne(whereClause);
+    }
+
     async all() {
         return await this.getRepo().find();
     }
@@ -152,11 +171,10 @@ export class UserService {
 
     async remove(id) {
         let userToRemove = await this.getRepo().findOne(id);
-        await this.getRepo().remove(userToRemove);
+        await this.getRepo().softDelete(userToRemove);
     }
 
     private static generateToken(user: User) {
-        const key = String(get("key.value"));
         logger.info(`Generating token for user -> ${user.username}`);
         return jwt.sign({id: user.id, role: user.role, status: user.status}, key, {expiresIn: '1h'});
     }
@@ -181,10 +199,6 @@ export class UserService {
             if (user) return createMessage(`A user with this Phone Number: ${phone} already exist`);
         }
         return null;
-    }
-
-    private async findWhere(whereClause: object) {
-        return await this.getRepo().findOne(whereClause);
     }
 
     private async updateWhere(searchFor: Object, update: Object) {
