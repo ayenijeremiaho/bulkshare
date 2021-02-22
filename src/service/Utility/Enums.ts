@@ -11,4 +11,13 @@ enum status {
     VERIFIED,
 }
 
+enum productState {
+    AVAILABLE,
+    OUT_OF_STOCK,
+}
+
+enum measurementType {
+
+}
+
 export {role, status}

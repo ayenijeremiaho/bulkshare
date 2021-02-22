@@ -19,10 +19,5 @@ export class PasswordDto {
     passwordConfirm: string
 
     @Expose()
-    @IsNotEmpty({message: "Username cannot be empty"})
-    @MinLength(5, {message: "Username too short"})
-    @MaxLength(20)
-    username: string;
-
     key: String;
 }

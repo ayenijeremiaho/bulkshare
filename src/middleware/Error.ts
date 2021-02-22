@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
-import winston from "winston";
+import {logger} from "../utility";
 
 export const errorHandler = (err: Error, req: Request, res: Response, next) => {
-    winston.error(err.message, err);
+    logger.error(err.message, err);
     return res.status(500).send(err.message);
 }

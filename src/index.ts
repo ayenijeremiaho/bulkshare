@@ -20,8 +20,7 @@ const port = process.env.PORT || 3000;
 connectDb().then(() => {
     app.listen(port, () => {
         logger.info(`Server has started on port ${port}. Open http://localhost:3000/users to see results`);
-    })
-
+    });
 });
 
 

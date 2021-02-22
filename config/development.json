@@ -1,7 +1,7 @@
 {
   "sms": {
-    "APi_KEY": "MZGnXajfgOzRc9Yw5jCUmbbF4vhGb80SPKN6jIer5OTz7tT7Qhpg7wRup0VT",
-    "hostname": "www.bulksmsnigeria.com/api/v1/sms/create",
+    "apikey": "RWV1887mb4wHKfvTZJeMmcZzNtI2bYwE4uFqRyE2OiWaWDrf38PzDzBHUumq",
+    "hostname": "https://www.bulksmsnigeria.com/api/v1/sms/create",
     "sender": "BULKSHARE"
   },
   "mail": {
@@ -13,5 +13,9 @@
   },
   "key": {
     "value": "SHOULD_BE_SAVED_IN_ENV"
+  },
+  "winston": {
+    "maxFiles": 1,
+    "maxSize": 1
   }
 }

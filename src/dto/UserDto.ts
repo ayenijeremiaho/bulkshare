@@ -1,5 +1,5 @@
 import {IsEmail, IsMobilePhone, IsNotEmpty} from "class-validator";
-import {role} from "../service/User/UserEnum";
+import {role} from "../service/Utility/Enums";
 import {Exclude, Expose} from "class-transformer";
 
 @Exclude()
@@ -36,4 +36,7 @@ export class UserDto {
 
     @Expose()
     isDisabled: Boolean
+
+    @Expose()
+    token: String
 }

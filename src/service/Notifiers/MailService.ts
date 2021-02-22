@@ -32,7 +32,7 @@ export async function sendMail(to: string, subject: string, text: string) {
 
 // send mail with defined transport object
 let spoolAMail = async (transporter: Transporter, to: string, subject: string, text?, html?) => await transporter.sendMail({
-    from: '"Testing 👻" <noreply@bulkshare.com>', // sender address
+    from: '"Testing 👻" <bulkshare@blistorre.com>', // sender address
     to: to, // list of receivers
     subject: `${subject} ✔`, // Subject line
     text: text, // plain text body

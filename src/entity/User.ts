@@ -3,14 +3,17 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
-    Index,
+    Index, JoinColumn,
+    OneToMany, OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
-import {role, status} from "../service/User/UserEnum";
+import {role, status} from "../service/Utility/Enums";
+import {Shop} from "./Shop";
+import {Image} from "./Image";
 
 @Entity({name: 'users'})
-@Index(["email", "username"], {unique: true})
+@Index(["email", "phone", "username"], {unique: true})
 export class User {
 
     @PrimaryGeneratedColumn("uuid")
@@ -40,11 +43,24 @@ export class User {
     @Column({type: "enum", enum: status, default: status.UNVERIFIED})
     status: status;
 
+    @OneToMany(() => Shop, shop => shop.user)
+    shops: Shop[];
+
+    @OneToOne(() => Image)
+    @JoinColumn()
+    image: Image;
+
     @Column({name: "is_disabled", type: "boolean", default: true})
-    isDisabled: Boolean
+    isDisabled: boolean
+
+    @Column({name: "last_login_date", nullable:true})
+    lastLoginDate: Date;
+
+    @Column({name: "failed_login_count", default: 0})
+    failedLoginCount: number;
 
     @CreateDateColumn({name: "created_date"})
-    createDate: Date;
+    createdDate: Date;
 
     @UpdateDateColumn({name: "updated_date"})
     updatedDate: Date;

@@ -2,6 +2,7 @@ import {NextFunction, Request, Response} from "express";
 import {UserService} from "../service/User/UserService";
 import {User} from "../entity/User";
 import {plainToClass} from "class-transformer";
+import {createMessage, notFound} from "../service/Utility/messages";
 
 export class UserController {
 
@@ -10,44 +11,64 @@ export class UserController {
         return new UserService();
     }
 
-    async verifyUser(request: Request, response: Response, next: NextFunction) {
-        if (!request.body.key) return response.status(404).json("Invalid Request");
+    async login(request: Request, response: Response, next: NextFunction) {
+        const errors = await UserController.g_u_s().validateLoginData(request.body);
+        if (errors) return response.status(400).send(errors);
 
-        let result = await UserController.g_u_s().validateActivation(request.body);
+        const user: User = await UserController.g_u_s().validateLoginValue(request.body.value);
+        if (!user) return response.status(400).send(createMessage("User does not exist"));
+        if (user.isDisabled) return response.status(403).send(createMessage("Disabled user, check email for instructions"));
+
+        const count = await UserController.g_u_s().verifyFailedLoginCount(user);
+        if (count >= 5) return response.status(403).send(createMessage("Exceeded maximum tries. check email"));
+
+        const valid = await UserController.g_u_s().validateLoginPassword(user, request.body);
+        if (!valid) return response.status(400).send(createMessage("Incorrect Password"));
+
+        return response.send(UserController.g_u_s().generateUserToken(user));
+    }
+
+    async activate(request: Request, response: Response, next: NextFunction) {
+        if (!request.body.key) return response.status(404).send("Invalid Request");
+
+        let keyError = await UserController.g_u_s().validateActivationKey(request.body.key);
+        if (keyError) return response.status(403).send(keyError);
+
+        let dataError = await UserController.g_u_s().validateActivationData(request.body);
+        if (dataError) return response.status(400).send(dataError);
+
+        return response.send(createMessage("Successfully Activated"));
+
+
+    }
+
+    async signup(request: Request, response: Response, next: NextFunction) {
+        let result = await UserController.g_u_s().validateNewUser(request.body);
 
         if (!result) {
-            return response.send({"message": "Successfully activated"});
+            const user = plainToClass(User, request.body);
+            return response.send(await UserController.g_u_s().onBoardUser(user));
         }
 
-        response.send()
+        return response.status(404).json(result);
     }
 
     all(request: Request, response: Response, next: NextFunction) {
         return response.send(UserController.g_u_s().all());
     }
 
-    async one(request: Request, response: Response, next: NextFunction) {
-        let id = request.params.id;
-        let result = await UserController.g_u_s().one(id);
-
-        if (result) return response.send(200).json(result);
-
-        return response.status(404).send("No User");
-    }
-
-    async save(request: Request, response: Response, next: NextFunction) {
-        let result = await UserController.g_u_s().validateNewUser(request.body);
-
-        if (!result) {
-            const user = plainToClass(User, request.body);
-            return response.send(UserController.g_u_s().onBoardUser(user));
-        }
-
-        return response.status(404).json(result);
-    }
-
     async remove(request: Request, response: Response, next: NextFunction) {
         return UserController.g_u_s().remove(request.params.id);
     }
+
+    async one(request: Request, response: Response, next: NextFunction) {
+        let id = request.params.id;
+        let user: User = await UserController.g_u_s().one(id);
+
+        if (user) return response.send(user);
+
+        return response.status(404).send(notFound("User"));
+    }
+
 
 }

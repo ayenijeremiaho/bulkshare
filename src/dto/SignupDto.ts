@@ -1,15 +1,4 @@
-import {
-    IsEmail,
-    IsMobilePhone,
-    IsNotEmpty,
-    IsString,
-    Matches, Max,
-    MaxLength,
-    Min,
-    MinLength,
-    ValidateIf
-} from "class-validator";
-import {Match} from "../service/Utility/match.decarator";
+import {IsEmail, IsMobilePhone, IsNotEmpty, IsString, MaxLength, MinLength, ValidateIf} from "class-validator";
 import {Exclude, Expose} from "class-transformer";
 
 @Exclude()
@@ -30,27 +19,14 @@ export class SignupDto {
     lastName: string;
 
     @Expose()
-    @ValidateIf(o => o.phone === '')
+    @ValidateIf(o => o.phone === '' || o.email !== '')
     @IsEmail({}, {message: "Invalid Email"})
     email: string;
 
     @Expose()
-    @ValidateIf(o => o.email === '')
+    @ValidateIf(o => o.email === '' || o.phone !== '')
     @IsMobilePhone('en-NG', {strictMode: false}, {message: "Invalid Phone No"})
     phone: string;
-
-    @Expose()
-    @IsNotEmpty({message: "Password cannot be empty"})
-    @IsString()
-    @MinLength(4)
-    @MaxLength(20)
-    @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {message: 'Password too weak'})
-    password: string;
-
-    @Expose()
-    @IsNotEmpty({message: "Password Confirmation cannot be empty"})
-    @Match('password', {message: "Password do not match"})
-    passwordConfirm: string
 
     @Expose()
     @IsNotEmpty({message: "Username cannot be empty"})
